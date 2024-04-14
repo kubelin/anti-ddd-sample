@@ -24,18 +24,9 @@ configurations {
 }
 
 repositories {
+  
 	//mavenCentral()
 	mavenLocal()
-	  maven {
-            name = "my-local-repo"
-            credentials {
-                  username = "admin"
-                  password = "Malife#2"
-              }
-            url = uri('http://localhost:8082/artifactory/my-local-repo/')
-              //url = layout.buildDirectory.dir("publishing-repository")
-            allowInsecureProtocol true
-        } 
 }
 
 ext {
@@ -98,8 +89,6 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30' // 테스트를 위한 세팅
   testImplementation 'org.projectlombok:lombok:1.18.30' // 테스트를 위한 세팅
-	//testCompileOnly 'org.projectlombok:lombok'
-	//testAnnotationProcessor 'org.projectlombok:lombok'
 
 }
 
@@ -116,20 +105,6 @@ publishing {
         }
         
         publications {
-          //1.
-          //mavenJava(MavenPublication) {        
-              //from components.java
-          //2.
-            //maven(MavenPublication) {
-            //  groupId = 'com.mypetmanager'
-            //  artifactId = 'publish-sample'
-            //  version = '1.4'
-          //3.
-          //maven(MavenPublication) {
-          //  artifact sourceJar // Publish the output of the sourceJar task
-          //  artifact 'my-file-name.jar' // Publish a file created outside of the build
-          //  artifact source: sourceJar, classifier: 'src', extension: 'zip'
-          //}
           myLibrary(MavenPublication) {
             groupId = 'com.mypetmanager'
             artifactId = 'publish-sample'
@@ -148,38 +123,6 @@ publishing {
           } // end of myLibrary
         }// end of publications
     }
-}
-
-//task uploadArchives {
-//    repositories {
-//        maven {            
-//            repository(url: 'path/to/repository') {
-//                authentication(userName: 'repositoryId', password: 'repositoryPassword')
-//            }
-//            snapshotRepository(url: 'path/to/repository') {
-//                authentication(userName: 'repositoryId', password: 'repositoryPassword')
-//            }
-//        }
-//    }
-//}
-
-// Querydsl 설정부
-def querydslDir = ".apt_generated"
-//def querydslDir = 'src/main/generated'
-
-// querydsl QClass 파일 생성 위치를 지정
-tasks.withType(JavaCompile) {
- options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-}
-
-// java source set 에 querydsl QClass 위치 추가
-sourceSets {
- main.java.srcDirs += [ querydslDir ]
-}
-
-// gradle clean 시에 QClass 디렉토리 삭제 
-clean.doLast {
- file(querydslDir).deleteDir()
 }
 
 dependencyManagement {
